@@ -12,7 +12,11 @@ const correspondingFile = `${randomName}.pdf`;
 
 const myPath = path.join(__dirname, '/diplomas', correspondingFile);
 
-console.log('myPath>> ', myPath);
+const directory = [
+	{ name: 'ORADOR 1', email: 'alexisherlanda@gmail.com' },
+	{ name: 'ORADOR 2', email: 'alexisherlanda@gmail.com' },
+	{ name: 'ORADOR 3', email: 'alexisherlanda@gmail.com' },
+];
 
 app.post('/', (req, res) => {
 	const isValid = true;
@@ -29,25 +33,37 @@ app.post('/', (req, res) => {
 		},
 	});
 
-	//TODO: Hide this
-	const mailOptions = {
-		from: process.env.EMAIL,
-		to: process.env.EMAIL,
-		cc: 'alexisherlanda@gmail.com',
-		subject: 'Tu diploma esta listo',
-		text: 'Te enviamos una copia de tu correo',
-		attachments: [
-			{
-				fileName: 'Diploma',
-				path: myPath,
-			},
-		],
-	};
+	directory.forEach((person) => {
+		console.log('person >>', person.name);
+		const mailOptions = {
+			from: process.env.EMAIL,
+			to: process.env.EMAIL,
+			cc: 'alexisherlanda@gmail.com',
+			subject: 'Tu diploma esta listo',
+			text: 'Te enviamos una copia de tu correo',
+			attachments: [
+				{
+					filename: 'Diploma',
+					path: myPath,
+				},
+			],
+		};
 
-	transporter.sendMail(mailOptions, (err, data) => {
-		if (err) return res.status(500).send({ message: err.message });
-		return res.send({ message: 'Email sent', data: data });
+		transporter.sendMail(mailOptions, (err, data) => {
+			let result = false;
+			if (err) {
+				result = err;
+				console.log('Error', err);
+			} else {
+				result = data;
+				console.log('Correct', data);
+			}
+
+			return status;
+		});
 	});
+
+	return res.send({ message: 'Operation complete', data: 'data' });
 });
 
 module.exports.mailer = functions.https.onRequest(app);
