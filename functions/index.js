@@ -4,11 +4,11 @@ const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
 app.use(cors({ origin: true }));
 
 app.post('/', (req, res) => {
-	const { body } = req;
 	const isValid = true;
 	if (!isValid) {
 		return res.status(400).send({ message: 'Algo salio mal' });
@@ -22,20 +22,20 @@ app.post('/', (req, res) => {
 		},
 	});
 
-	const createSubject = () => {
-		return (
-			'Resultados de Debate ' +
-			req.body.judgeData.name +
-			req.body.callData.round
-		);
-	};
 	//TODO: Hide this
 	const mailOptions = {
 		from: process.env.EMAIL,
 		to: process.env.EMAIL,
-		cc: 'alexisherlanda64gmail.com',
-		subject: createSubject(),
-		text: JSON.stringify(req.body),
+		cc: 'alexisherlanda@gmail.com',
+		subject: 'Tu diploma esta listo',
+		text: 'Te enviamos una copia de tu correo',
+		attachments: [
+			{
+				fileName: 'Diploma',
+				path:
+					'C:\\Users\\aemendoza\\Documents\\Stefanini\\React\\wsdc-ballot-backend\\functions\\diplomas\\ABEL EDUARDO GARCÍA CALDERÓN.pdf',
+			},
+		],
 	};
 
 	transporter.sendMail(mailOptions, (err, data) => {
