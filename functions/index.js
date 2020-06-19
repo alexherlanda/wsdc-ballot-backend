@@ -7,10 +7,6 @@ const app = express();
 const path = require('path');
 
 app.use(cors({ origin: true }));
-const randomName = 'ABEL EDUARDO GARCÍA CALDERÓN';
-const correspondingFile = `${randomName}.pdf`;
-
-const myPath = path.join(__dirname, '/diplomas', correspondingFile);
 
 const directory = [
 	{ name: 'ORADOR 1', email: 'alexisherlanda@gmail.com' },
@@ -19,6 +15,8 @@ const directory = [
 ];
 
 app.post('/', (req, res) => {
+	let successCases = [];
+	let errorCases = [];
 	const isValid = true;
 
 	if (!isValid) {
@@ -34,7 +32,14 @@ app.post('/', (req, res) => {
 	});
 
 	directory.forEach((person) => {
-		console.log('person >>', person.name);
+		const correspondingFile = 'Orador 1.pdf';
+		const correspondingPath = path.join(
+			__dirname,
+			'/diplomas',
+			correspondingFile
+		);
+
+		console.log('correspondingPath >>', correspondingPath);
 		const mailOptions = {
 			from: process.env.EMAIL,
 			to: process.env.EMAIL,
@@ -43,8 +48,8 @@ app.post('/', (req, res) => {
 			text: 'Te enviamos una copia de tu correo',
 			attachments: [
 				{
-					filename: 'Diploma',
-					path: myPath,
+					fileName: 'Diploma',
+					path: correspondingPath,
 				},
 			],
 		};
@@ -53,17 +58,22 @@ app.post('/', (req, res) => {
 			let result = false;
 			if (err) {
 				result = err;
-				console.log('Error', err);
+				errorCases.push(data);
 			} else {
 				result = data;
-				console.log('Correct', data);
+				successCases.push(data);
 			}
 
 			return status;
 		});
 	});
 
-	return res.send({ message: 'Operation complete', data: 'data' });
+	console.log('successCases', successCases);
+
+	return res.send({
+		message: 'Operation complete',
+		data: { successCases: successCases, errorCases: errorCases },
+	});
 });
 
 module.exports.mailer = functions.https.onRequest(app);
