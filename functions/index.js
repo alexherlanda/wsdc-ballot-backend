@@ -7,12 +7,10 @@ const app = express();
 const path = require('path');
 
 app.use(cors({ origin: true }));
+const randomName = 'ABEL EDUARDO GARCÍA CALDERÓN';
+const correspondingFile = `${randomName}.pdf`;
 
-const myPath = path.join(
-	__dirname,
-	'/diplomas',
-	'ABEL EDUARDO GARCÍA CALDERÓN.pdf'
-);
+const myPath = path.join(__dirname, '/diplomas', correspondingFile);
 
 console.log('myPath>> ', myPath);
 
