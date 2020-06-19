@@ -8,8 +8,17 @@ const path = require('path');
 
 app.use(cors({ origin: true }));
 
+const myPath = path.join(
+	__dirname,
+	'/diplomas',
+	'ABEL EDUARDO GARCÍA CALDERÓN.pdf'
+);
+
+console.log('myPath>> ', myPath);
+
 app.post('/', (req, res) => {
 	const isValid = true;
+
 	if (!isValid) {
 		return res.status(400).send({ message: 'Algo salio mal' });
 	}
@@ -32,8 +41,7 @@ app.post('/', (req, res) => {
 		attachments: [
 			{
 				fileName: 'Diploma',
-				path:
-					'C:\\Users\\aemendoza\\Documents\\Stefanini\\React\\wsdc-ballot-backend\\functions\\diplomas\\ABEL EDUARDO GARCÍA CALDERÓN.pdf',
+				path: myPath,
 			},
 		],
 	};
