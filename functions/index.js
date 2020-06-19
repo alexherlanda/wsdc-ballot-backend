@@ -32,7 +32,7 @@ app.post('/', (req, res) => {
 	});
 
 	directory.forEach((person) => {
-		const correspondingFile = 'Orador 1.pdf';
+		const correspondingFile = `${person.name}.pdf`;
 		const correspondingPath = path.join(
 			__dirname,
 			'/diplomas',
@@ -63,7 +63,6 @@ app.post('/', (req, res) => {
 				result = data;
 				successCases.push(data);
 			}
-
 			return status;
 		});
 	});
