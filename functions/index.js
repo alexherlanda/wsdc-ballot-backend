@@ -41,14 +41,14 @@ app.post('/', (req, res) => {
 
 		console.log('correspondingPath >>', correspondingPath);
 		const mailOptions = {
+			cc: 'alexisherlanda@gmail.com',
 			from: process.env.EMAIL,
 			to: process.env.EMAIL,
-			cc: 'alexisherlanda@gmail.com',
-			subject: 'Tu diploma esta listo',
-			text: 'Te enviamos una copia de tu correo',
+			subject: 'Tu diploma esta listo. Torneo Virtual Mx Debate 2020. ',
+			text: `Estimado ${person.name}, Anexamos a este correo tu diploma. Gracias por participar.  no responder a este correo`,
 			attachments: [
 				{
-					fileName: 'Diploma',
+					filename: 'Diploma.pdf',
 					path: correspondingPath,
 				},
 			],
@@ -58,10 +58,12 @@ app.post('/', (req, res) => {
 			let result = false;
 			if (err) {
 				result = err;
-				errorCases.push(data);
+				console.log('ERR!', person.name);
+				errorCases.push({ email: person.email, name: person.name });
 			} else {
 				result = data;
-				successCases.push(data);
+				console.log('SUCCESS!', person.name);
+				successCases.push({ email: person.email, name: person.name });
 			}
 			return status;
 		});
