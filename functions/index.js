@@ -39,11 +39,10 @@ app.post('/', (req, res) => {
 			correspondingFile
 		);
 
-		console.log('correspondingPath >>', correspondingPath);
 		const mailOptions = {
-			cc: 'alexisherlanda@gmail.com',
+			cc: 'logistica@debatemx.org',
 			from: process.env.EMAIL,
-			to: process.env.EMAIL,
+			to: person.email,
 			subject: 'Tu diploma esta listo. Torneo Virtual Mx Debate 2020. ',
 			text: `Estimado ${person.name}, Anexamos a este correo tu diploma. Gracias por participar.  no responder a este correo`,
 			attachments: [
