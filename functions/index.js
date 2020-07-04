@@ -9,15 +9,19 @@ const path = require('path');
 app.use(cors({ origin: true }));
 
 const directory = [
-	{ name: 'ORADOR 1', email: 'alexisherlanda@gmail.com' },
-	{ name: 'ORADOR 2', email: 'alexisherlanda@gmail.com' },
-	{ name: 'ORADOR 3', email: 'alexisherlanda@gmail.com' },
+	{
+		id: '45',
+		name: 'ADRIANA JAZMIN ROJAS VELEZ ',
+		email: 'ajazminrv@gmail.com',
+	},
 ];
 
 app.post('/', (req, res) => {
 	let successCases = [];
+
 	let errorCases = [];
 	const isValid = true;
+	let processed = 0;
 
 	if (!isValid) {
 		return res.status(400).send({ message: 'Algo salio mal' });
@@ -32,7 +36,7 @@ app.post('/', (req, res) => {
 	});
 
 	directory.forEach((person) => {
-		const correspondingFile = `${person.name}.pdf`;
+		const correspondingFile = `${person.id}.pdf`;
 		const correspondingPath = path.join(
 			__dirname,
 			'/diplomas',
@@ -40,11 +44,11 @@ app.post('/', (req, res) => {
 		);
 
 		const mailOptions = {
-			cc: 'logistica@debatemx.org',
+			cc: 'world.schools.smooth.ballot@gmail.com',
 			from: process.env.EMAIL,
 			to: person.email,
-			subject: 'Tu diploma esta listo. Torneo Virtual Mx Debate 2020. ',
-			text: `Estimado ${person.name}, Anexamos a este correo tu diploma. Gracias por participar.  no responder a este correo`,
+			subject: 'Tu justificante esta listo',
+			text: `Gracias por participar. Se anexa a este correo tu justificante del TMVD INE-AMD. Envío automático no responder a este correo `,
 			attachments: [
 				{
 					filename: 'Diploma.pdf',
@@ -54,17 +58,20 @@ app.post('/', (req, res) => {
 		};
 
 		transporter.sendMail(mailOptions, (err, data) => {
+			processed++;
+			console.log('processed', processed);
 			let result = false;
 			if (err) {
 				result = err;
-				console.log('ERR!', person.name);
+				console.log('ERROR!' + person.id, person.name);
+				console.log('err >>', err);
 				errorCases.push({ email: person.email, name: person.name });
 			} else {
 				result = data;
-				console.log('SUCCESS!', person.name);
+				console.log('SUCCESS!' + person.id, person.name);
 				successCases.push({ email: person.email, name: person.name });
 			}
-			return status;
+			return result;
 		});
 	});
 
